@@ -23,16 +23,29 @@
     
     <script>
         // JavaScript code to initialize the map
-        var map = new ol.Map({
-            target: 'map', // The ID of the HTML element to render the map into
+        const nsiLayer = new ol.layer.VectorTile({
+            source: new ol.source.VectorTile({
+                format: new ol.format.MVT(),
+                attributions: "USACE",
+                minZoom: 7,
+                maxZoom: 15,
+                url: 'https://ml-dev.sec.usace.army.mil{z}/{x}/{y}.pbf'
+            }),
+            style: new ol.style.Style({
+                stroke: new ol.style.Stroke({ color: 'blue', width: 1 }),
+                fill: new ol.style.Fill({ color: 'rgba(0, 0, 255, 0.1)' })
+            })
+        });
+
+        const map = new ol.Map({
+            target: 'map',
             layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.OSM() // Use OpenStreetMap as the tile source
-                })
+                new ol.layer.Tile({ source: new ol.source.OSM() }),
+                nsiLayer
             ],
             view: new ol.View({
-                center: ol.proj.fromLonLat([0, 0]), // Center the map at [0, 0] (lon, lat), projected to the map's coordinate system
-                zoom: 2 // Set the initial zoom level
+                center: ol.proj.fromLonLat([-98, 38]),
+                zoom: 4
             })
         });
     </script>
